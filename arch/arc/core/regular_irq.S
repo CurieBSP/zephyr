@@ -79,6 +79,13 @@ SECTION_FUNC(TEXT, _rirq_exit)
 	mov r1, _nanokernel
 	ld r2, [r1, __tNANO_current_OFFSET]
 
+	/*
+	 * Lock interrupts to ensure kernel queues do not change from this
+	 * point on until return from interrupt.
+	 */
+
+	clri
+
 #if CONFIG_NUM_REGULAR_IRQ_PRIO_LEVELS > 1
 	/* check if we're a nested interrupt: if so, let the interrupted interrupt
 	 * handle the reschedule */
